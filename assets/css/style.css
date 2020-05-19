@@ -1,0 +1,68 @@
+html {
+    height: 100%;
+}
+
+body {
+    background-image: url("../images/court-background.jpg");
+    background-repeat: no-repeat;
+    background-size: 100rem;
+    background-attachment: fixed;
+    background-position: center;
+    height: 100%;
+}
+
+#app-wrapper {
+    height: 90%;
+    box-sizing: border-box;
+    margin: 2.5% auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.jumbotron {
+    width: 95%;
+    height: 90%;
+    outline: grey solid 2px;
+    text-align: center;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#app-title {
+    background-color: white;
+    height: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+hr{
+    border: 2px solid rgba(43, 43, 43, 0.5);
+    border-radius: 5px;
+  }
+
+#main-display {
+    outline: grey solid 2px;
+    background-color: white;
+    text-align: center;
+    height: 85%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#trivia-area {
+    width: 65%;
+    height: 65%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#start-btn {
+    display: block;
+    width: 20%;
+    height: 10%;
+    display: inline-block;
+    vertical-align: middle;
+}
