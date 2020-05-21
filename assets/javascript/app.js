@@ -76,6 +76,8 @@ let countdownTimer;
 let triviaAreaDisp = $("#trivia-area-disp"); 
 let countdownText = $("#counter-text"); 
 
+console.log(questions[1].answers); 
+
 // Create the game object
 let game = {
     // Set all variables to necessary values
@@ -88,40 +90,64 @@ let game = {
     // Create the countdown function
     countdownFunc: () => {
         // Decrement the counter by interval of 1
-        this.countdownTimer -= 1; 
+        game.countdownTimer -= 1; 
 
         // Update the DOM element to reflect counter value
-        countdownText.text(this.countdownTimer); 
+        countdownText.text(game.countdownTimer); 
 
         // If countdownTimer reaches 0
-        if (this.countdownTimer === 0) {
+        if (game.countdownTimer === 0) {
             // Console.log that time is up
             console.log("Time is up!");
             
             // Run the timeUp function
-            this.ontimeupdate();
+            game.timeUpFunc();
         }; 
     }, 
 
-    // Create a function to render questionCards
-    // this.currentQuestion
-    // this.questionsCopy
-    renderQuestionCardsFunc = (number, array) => {
-        // Loop through the array using the number as interval
-        for (number = 0; number < array.length; number++) {
-            // Create a new html h2 tag for 
-        }
-    }, 
-
-    // Create a function to load in a new question
-    loadQuestion: () => {
+    // Create a function to load in a question
+    loadQuestionFunc: () => {
         // Define the timer using setInterval function
-        // Bind
-        timer = setInterval(this.countdownFunc.bind(this), 1000)
+        // Every 1000ms, run the game's countdownFunc
+        timer = setInterval(game.countdownFunc, 1000);
 
-        // Access the triviaAreaDisp and create a new HTML
+        // Create a new html div the question
+        let question = $("<h2>", {
+            class: "question"
+        }).text(questionsCopy[currentQuestion].question); 
+
+        // Create a new html div for list-group
+        let listGroup = $("div", {
+            class: "list-group"
+        });
+
+        // Access questionsCopy at the currentQuestion index
+        // Loop through each answer and for each create a list-group-item
+        for (var i = 0; i < questionsCopy[currentQuestion].answers.length; i++) {
+            let listGroupItem = $("<div>", {
+                type: "button", 
+                class: "list-group-item list-group-item-action"
+            });
+
+            // Append each listGroupItem to the listGroup
+            listGroup.append(listGroupItem);
+        };
+
+        // Display question and listGroup to triviaAreaDisp
+        triviaAreaDisp.append(question, listGroup);
     }, 
 
+    // Create a function to handle when to load in the next question
+    nextQuestionFunc: () => {
+        // Set the countdownTimer to equal the starting time
+        game.countdownTimer = timerStartTime; 
 
-    // Create the countdown 
+        // Set the countdownText to be the countdownTimer
+        countdownText.text(game.countdownTimer); 
+
+        // Then increment the currentQuestion variable by 1
+        game.currentQuestion+= 1; 
+
+        // Then run the load
+    },
 };
