@@ -66,15 +66,15 @@ let incorrect;
 // Initialize time variables
 // timer will hold setInterval
 let timer; 
-let timerStartTime = 30;
+let counter;
+let counterStartTime = 30;
 
 // Initialize game variables 
 let currentQuestion; 
-let countdownTimer; 
 
 // Get reference to the DOM elements
 let triviaAreaDisp = $("#trivia-area-disp"); 
-let countdownText = $("#counter-text"); 
+let counterText = $("#counter-text"); 
 
 console.log(questions[1].answers); 
 
@@ -83,20 +83,20 @@ let game = {
     // Set all variables to necessary values
     questionsCopy: questions, 
     currentQuestion: 0, 
-    countdownTimer: timerStartTime, 
+    counter: counterStartTime, 
     correct: 0, 
     incorrect: 0, 
     
     // Create the countdown function
     countdownFunc: () => {
         // Decrement the counter by interval of 1
-        game.countdownTimer -= 1; 
+        game.counter -= 1; 
 
         // Update the DOM element to reflect counter value
-        countdownText.text(game.countdownTimer); 
+        counterText.text(game.counter); 
 
         // If countdownTimer reaches 0
-        if (game.countdownTimer === 0) {
+        if (game.counter === 0) {
             // Console.log that time is up
             console.log("Time is up!");
             
@@ -148,6 +148,18 @@ let game = {
         // Then increment the currentQuestion variable by 1
         game.currentQuestion+= 1; 
 
-        // Then run the load
+        // Then run the loadQuestionFunc
+        loadQuestionFunc();
     },
+
+    // Create a function to handlw what happens when time is up
+    timeUpFunc: () => {
+        // Clear the timer
+        clearInterval(timer); 
+
+        // Set the countdownText to counter, should be 0 
+        counterText.html(game.count);
+
+        // 
+    }
 };
