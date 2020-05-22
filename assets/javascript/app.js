@@ -141,8 +141,6 @@ $(document).ready(function () {
 
   // Create a function that handles on click for when the player clicks on an answer
   $(triviaAreaDisp).on("click", ".list-group-item", function (event) {
-    console.log("Answer Clicked");
-
     // Get a handle on the data-name for the clicked answer
     let answerDataName = $(event.target).attr("data-name");
 
@@ -170,8 +168,9 @@ $(document).ready(function () {
       }
       console.log("Current Question: " + currentQuestion);
       console.log("Counter: " + counter);
-      console.log("Correct Counter " + correct);
-      console.log("Incorrect Counter: " + incorrect);
+      console.log("Correct Counter " + correctCounter);
+      console.log("Incorrect Counter: " + incorrectCounter);
+      console.log("Unanswered Counter: " + unansweredCounter);
     },
 
     // Create the countdown function
@@ -424,8 +423,6 @@ $(document).ready(function () {
 
     // Create a function to handle what happens when an wrong answer is clicked
     handleWrongAnswerFunc: () => {
-      console.log("Wrong Answer Function");
-
       // Clear timer
       clearInterval(timer);
 
