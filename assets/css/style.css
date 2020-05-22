@@ -66,3 +66,39 @@ hr{
     display: inline-block;
     vertical-align: middle;
 }
+
+#score-area-row {
+    text-align: center;
+    height: 30%;
+    width: 75%;
+    display: block;
+    justify-content: center;
+    align-items: center;
+    clear: both;
+}
+
+#score-jumbotron {
+    height: 50%;
+}
+
+
+
+
+
+#score-area-disp {
+    width: 100%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clear: both;
+}
+
+#question-area-disp {
+    width: 80%;
+    height: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    clear: both;
+}
