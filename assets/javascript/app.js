@@ -9,7 +9,7 @@ let questions = [
       "John Stockton",
     ],
     correctAnswer: "Wilt Chamberlain",
-    correctAnswerImg: "../images/wilt.jpg",
+    correctAnswerImg: "./assets/images/wilt.jpg",
   },
   {
     question: "What is the name of mascot for the former Seattle Team?",
@@ -97,6 +97,7 @@ let gameHasStarted = false;
 // Initialize score counter variables
 let correctCounter;
 let incorrectCounter;
+let unansweredCounter;
 
 // Initialize time variables
 // timer will hold setInterval
@@ -147,8 +148,6 @@ $(document).ready(function () {
 
     // Run the answerClickFunc and pass in the answerDataName
     game.answerClickFunc(answerDataName);
-
-
   });
 
   // Create the game object
@@ -159,7 +158,8 @@ $(document).ready(function () {
         (currentQuestion = 0),
         (counter = counterStartTime),
         (correctCounter = 0),
-        (incorrectCounter = 0);
+        (incorrectCounter = 0),
+        (unansweredCounter = 0);
     },
 
     // Create a function to console log all variables to inspect
@@ -253,16 +253,16 @@ $(document).ready(function () {
     // Create a function to handle when to load in the next question
     nextQuestionFunc: () => {
       // Set the countdownTimer to equal the starting time
-      game.countdownTimer = timerStartTime;
+      game.counter = counterStartTime;
 
       // Set the countdownText to be the countdownTimer
-      countdownText.text(game.countdownTimer);
+      counterText.text(game.counter);
 
       // Then increment the currentQuestion variable by 1
       game.currentQuestion += 1;
 
       // Then run the loadQuestionFunc
-      loadQuestionFunc();
+      game.loadQuestionFunc();
     },
 
     // Create a function to handlw what happens when time is up
@@ -270,45 +270,30 @@ $(document).ready(function () {
       // Clear the timer
       clearInterval(timer);
 
+      // Increment unanswered counter
+      unansweredCounter++;
+
       // Set the counterText to counter
       counterText.html(game.counter);
 
-      // Create a html div for out of time card
-      let card = $("<div>", {
-        class: "card text-white bg-warning mb-3",
-      });
+      console.log("Correct Answers: " + correctCounter);
+      console.log("Wrong Answers: " + incorrectCounter);
+      console.log("Unanswereds: " + unanswereds);
 
-      // Create a html div for card header
-      let header = $("<div>", {
-        class: "card-header",
-      }).text("Out of Time!");
+      // Check to see if the current question just answered is the last question
+      if (currentQuestion === questionsCopy.length - 1) {
+        // Then after 3 seconds, run the resultsFunc
+        setTimeout(game.resultsFunc, 3 * 1000);
+      } else {
+        // Increment currentQuestion
+        currentQuestion++;
 
-      // Create a html div for card body
-      let body = $("<div>", {
-        class: "card-body",
-      });
-
-      // Create a html div for correct answer
-      let correctAnswer = $("<p>", {
-        class: "card-text",
-      }).text(
-        "The correct answer was: " +
-          questionsCopy[this.currentQuestion].correctAnswer
-      );
-
-      // Create a html div for correct answer image
-      let correctAnswerImg = $("<img>", {
-        src: questionsCopy[this.currentQuestion].image,
-      });
-
-      // Construct the card
-      card.append(header, body);
-      body.append(correctAnswer, correctAnswerImg);
-
-      // Run the checkAnswerFunc
+        // After 3 seconds, run the nextQuestionFunc
+        setTimeout(game.nextQuestionFunc(), 3 * 1000);
+      }
     },
 
-    results: () => {
+    resultsFunc: () => {
       // Clear timer variable
       clearInterval(timer);
 
@@ -330,22 +315,17 @@ $(document).ready(function () {
       // Create a html div for correct answers
       let correctAnswers = $("<p>", {
         class: "card-text",
-      }).text("Correct Answers: " + game.correct);
+      }).text("Correct Answers: " + correctCounter);
 
       // Create a html div for wrong answers
       let incorrectAnswers = $("<p>", {
         class: "card-text",
-      }).text("Incorrect Answers: " + game.incorrect);
+      }).text("Incorrect Answers: " + incorrectCounter);
 
       // Create a html div for unanswereds
       let unanswereds = $("<p>", {
         class: "card-text",
-      }).text(
-        "Unanswereds: " +
-          // Calculate number of unanswered questions
-          // Total number of questions in the array of questions - total numbered of answered questions
-          (questionsCopy.length - (game.correct + game.incorrect))
-      );
+      }).text("Unanswereds: " + unansweredCounter);
 
       // Create a button prompting user to restart game
       let restartBtn = $("button", {
@@ -389,11 +369,24 @@ $(document).ready(function () {
       // Increment correct answer counter
       correctCounter++;
 
+      console.log("Correct Answers: " + correctCounter);
+      console.log("Wrong Answers: " + incorrectCounter);
+      console.log("Unanswereds: " + unansweredCounter);
+
       // Clear the triviaAreaDisp();
       triviaAreaDisp.empty();
 
-      // Run renderCorrectAnswerCardFunc
-      game.renderCorrectAnswerCardFunc();
+      // Check to see if the current question just answered is the last question
+      if (currentQuestion === questionsCopy.length - 1) {
+        // Then after 3 seconds, run the resultsFunc
+        setTimeout(game.resultsFunc, 3 * 1000);
+      } else {
+        // Increment currentQuestion
+        currentQuestion++;
+
+        // After 3 seconds, run the nextQuestionFunc
+        setTimeout(game.nextQuestionFunc(), 3 * 1000);
+      }
     },
 
     // Create a function to render correctAnswerCard
@@ -413,6 +406,8 @@ $(document).ready(function () {
         class: "card-body",
       });
 
+      console.log(questionsCopy[currentQuestion].correctAnswerImg);
+
       // Create a new html div for img
       let correctAnswerCardImg = $("<img>", {
         class: "card-img",
@@ -430,6 +425,61 @@ $(document).ready(function () {
     // Create a function to handle what happens when an wrong answer is clicked
     handleWrongAnswerFunc: () => {
       console.log("Wrong Answer Function");
+
+      // Clear timer
+      clearInterval(timer);
+
+      // Increment incorrect counter
+      incorrectCounter++;
+
+      console.log("Correct Answers: " + correctCounter);
+      console.log("Wrong Answers: " + incorrectCounter);
+      console.log("Unanswereds: " + unansweredCounter);
+
+      // Clear the triviaAreaDisp();
+      triviaAreaDisp.empty();
+
+      // Check to see if the current question just answered is the last question
+      if (currentQuestion === questionsCopy.length - 1) {
+        // Then after 3 seconds, run the resultsFunc
+        setTimeout(game.resultsFunc, 3 * 1000);
+      } else {
+        // Increment currentQuestion
+        currentQuestion++;
+
+        // After 3 seconds, run the nextQuestionFunc
+        setTimeout(game.nextQuestionFunc(), 3 * 1000);
+      }
+    },
+
+    renderWrongAnswerCardFunc: () => {
+      // Create a new html div for wrongAnswerCard
+      let wrongAnswerCard = $("<div>", {
+        class: "card",
+      });
+
+      // Create a new html div for header
+      let wrongAnswerCardHeader = $("<div>", {
+        class: "card-header",
+      }).text("Wrong!");
+
+      // Create a new html div for body
+      let wrongAnswerCardBody = $("<div>", {
+        class: "card-body",
+      });
+
+      // Create a new html div for img
+      let wrongAnswerCardImg = $("<img>", {
+        class: "card-img",
+        src: "./assets/images/cryingjordan.jpg",
+      });
+
+      // Construct the card
+      wrongAnswerCard.append(wrongAnswerCardHeader, wrongAnswerCardBody);
+      wrongAnswerCardBody.append(wrongAnswerCardImg);
+
+      // Display the correctAnswerCardBody to triviaAreaDisp
+      triviaAreaDisp.append(wrongAnswerCard);
     },
   };
 
